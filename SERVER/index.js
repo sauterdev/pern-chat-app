@@ -28,10 +28,6 @@ app.use(
 app.use(express.json()); //parses json coming though server to be treated like js object
 app.use('/auth', authRouter); //any request to /auth will run authRouter
 
-app.get('/', (req, res) => {
-  res.json('hi');
-});
-
 //when socketIo receives a connection it runs callback
 io.on('connect', (socket) => {});
 
