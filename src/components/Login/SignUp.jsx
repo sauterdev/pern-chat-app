@@ -19,7 +19,7 @@ const SignUp = () => {
       onSubmit={(values, actions) => {
         const vals = { ...values }; //store values before resetting form
         actions.resetForm();
-        fetch('http://localhost:4000/auth/register', {
+        fetch('http://localhost:4000/auth/signup', {
           //object to configure request
           method: 'POST',
           credentials: 'include',
@@ -35,6 +35,7 @@ const SignUp = () => {
             if (!res || !res.ok || res.status >= 400) {
               return;
             }
+            //console.log(res);
             return res.json();
           })
           .then((data) => {
@@ -48,7 +49,7 @@ const SignUp = () => {
 
         <TextField name="username" placeholder="Enter username" autoComplete="off" label="Username" />
 
-        <TextField name="password" placeholder="Enter password" autoComplete="off" label="Password" />
+        <TextField name="password" placeholder="Enter password" autoComplete="off" label="Password" type="password" />
 
         <ButtonGroup pt="1rem">
           <Button colorScheme="teal" type="submit">

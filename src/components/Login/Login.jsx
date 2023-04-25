@@ -34,6 +34,7 @@ const Login = () => {
             if (!res || !res.ok || res.status >= 400) {
               return;
             }
+            console.log(res);
             return res.json();
           })
           .then((data) => {
@@ -47,7 +48,7 @@ const Login = () => {
 
         <TextField name="username" placeholder="Enter username" autoComplete="off" label="Username" />
 
-        <TextField name="password" placeholder="Enter password" autoComplete="off" label="Password" />
+        <TextField name="password" placeholder="Enter password" autoComplete="off" label="Password" type="password" />
 
         <ButtonGroup pt="1rem">
           <Button colorScheme="teal" type="submit">
