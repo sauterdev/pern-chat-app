@@ -6,7 +6,8 @@ const formSchema = Yup.object({
   password: Yup.string().required('Password Required').min(6, 'Password too short').max(28, 'Password too long'),
 });
 
-const validateForm = (req, res) => {
+//using 'next' sets up validate form as a middleware. once run, it 'passes' to next middleware
+const validateForm = (req, res, next) => {
   const formData = req.body;
   //validates form entries, returns a promise for .catch/.then
   formSchema
@@ -17,8 +18,10 @@ const validateForm = (req, res) => {
     })
     .then((valid) => {
       if (valid) {
-        //res.status(200).send();
         console.log('form is good');
+        next();
+      } else {
+        res.status(422).send();
       }
     });
 };

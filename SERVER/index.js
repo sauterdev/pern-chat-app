@@ -1,11 +1,11 @@
 const express = require('express');
+const redisClient = require('./redis');
 const { Server } = require('socket.io');
 const app = express();
 const helmet = require('helmet'); //fills gap between node and express by securing http headers returned by express
 const cors = require('cors');
 const authRouter = require('./routers/authRouter');
 const session = require('express-session');
-const Redis = require('ioredis');
 //create a server and every http request passes through express app
 const server = require('http').createServer(app);
 const RedisStore = require('connect-redis').default;
@@ -20,7 +20,6 @@ const io = new Server(server, {
 });
 
 //middleware, every request going to express app goes through
-const redisClient = new Redis();
 app.use(helmet()); //http security features
 app.use(
   cors({
