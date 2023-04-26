@@ -5,8 +5,10 @@ const helmet = require('helmet'); //fills gap between node and express by securi
 const cors = require('cors');
 const authRouter = require('./routers/authRouter');
 const session = require('express-session');
+const Redis = require('ioredis');
 //create a server and every http request passes through express app
 const server = require('http').createServer(app);
+const RedisStore = require('connect-redis').default;
 require('dotenv').config();
 
 //instance of server where socketIo is hosted
@@ -18,6 +20,7 @@ const io = new Server(server, {
 });
 
 //middleware, every request going to express app goes through
+const redisClient = new Redis();
 app.use(helmet()); //http security features
 app.use(
   cors({
@@ -32,6 +35,7 @@ app.use(
     secret: process.env.COOKIE_SECRET,
     credentials: true,
     name: 'sid',
+    store: new RedisStore({ client: redisClient }),
     resave: false, //only saves session if something changes
     saveUninitialized: false, //only sets cookie on browswer if user logs in
     cookie: {

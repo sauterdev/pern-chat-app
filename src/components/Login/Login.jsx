@@ -1,6 +1,6 @@
-import { VStack, ButtonGroup, Button, Heading } from '@chakra-ui/react';
+import { VStack, ButtonGroup, Button, Heading, Text } from '@chakra-ui/react';
 import { Formik, Form } from 'formik';
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import * as Yup from 'yup';
 import TextField from './TextField';
 import { useNavigate } from 'react-router-dom';
@@ -9,6 +9,7 @@ import { AccountContext } from '../AccountContext';
 const Login = () => {
   const navigate = useNavigate();
   const { setUser } = useContext(AccountContext);
+  const [error, setError] = useState(null);
   return (
     <Formik
       initialValues={{ username: '', password: '' }} //values need to match props being passed in to TextField ln 24,26
@@ -36,20 +37,29 @@ const Login = () => {
             if (!res || !res.ok || res.status >= 400) {
               return;
             }
-            // console.log(res);
+
             return res.json();
           })
           .then((data) => {
             if (!data) return;
             //saving user that has login set to true
             setUser({ ...data });
-            navigate('/home');
-            // console.log(data);
+            if (data.status) {
+              //if status on the data response, set error to it for display
+              setError(data.status);
+            } else if (data.loggedIn) {
+              navigate('/home');
+            }
           });
       }}
     >
       <VStack as={Form} w={{ base: '90%', md: '500px' }} m="auto" justify="center" h="100vh" spacing="1rem">
         <Heading>Log In</Heading>
+
+        {/* display log in error if there is one from error context ln 49 */}
+        <Text as="p" color="red.500">
+          {error}
+        </Text>
 
         <TextField name="username" placeholder="Enter username" autoComplete="off" label="Username" />
 
