@@ -27,15 +27,17 @@ app.use(
 );
 app.use(express.json()); //parses json coming though server to be treated like js object
 app.use(
+  //sets cookie info for the session
   session({
     secret: process.env.COOKIE_SECRET,
     credentials: true,
     name: 'sid',
-    resave: false,
-    saveUninitialized: false,
+    resave: false, //only saves session if something changes
+    saveUninitialized: false, //only sets cookie on browswer if user logs in
     cookie: {
-      secure: process.env.ENVIRONMENT === 'production',
+      secure: process.env.ENVIRONMENT === 'production' ? 'true' : 'auto',
       httpOnly: true,
+      expires: 1000 * 60 * 60 * 24 * 7,
       sameSite: process.env.ENVIRONMENT === 'production' ? 'none' : 'lax',
     },
   }),

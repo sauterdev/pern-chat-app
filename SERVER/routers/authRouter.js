@@ -4,33 +4,42 @@ const router = express.Router();
 const pool = require('../db');
 const bcrypt = require('bcrypt');
 
-router.post('/login', async (req, res) => {
-  validateForm(req, res);
-
-  const potentialLogin = await pool.query('SELECT id, username, passhash FROM users u WHERE u.username=$1', [
-    req.body.username,
-  ]);
-  console.log(potentialLogin);
-
-  if (potentialLogin.rowCount > 0) {
-    const isSamePass = await bcrypt.compare(req.body.password, potentialLogin.rows[0].passhash);
-    if (isSamePass) {
-      //login
-      req.session.user = {
-        username: req.body.username,
-        id: potentialLogin.rows[0].id,
-      };
-      console.log('not good 1');
-      res.json({ loggedIn: true, username: req.body.username });
+router
+  .route('/login')
+  .get(async (req, res) => {
+    if (req.session.user && req.session.user.username) {
+      res.json({ loggedIn: true, username: req.session.user.username });
     } else {
-      console.log('not good 2');
+      res.json({ loggedIn: false });
+    }
+  })
+  .post(async (req, res) => {
+    validateForm(req, res);
+
+    const potentialLogin = await pool.query('SELECT id, username, passhash FROM users u WHERE u.username=$1', [
+      req.body.username,
+    ]);
+
+    //check for existing username
+    if (potentialLogin.rowCount > 0) {
+      //if found, compare password
+      const isSamePass = await bcrypt.compare(req.body.password, potentialLogin.rows[0].passhash);
+      //if password matches, create session and log in
+      if (isSamePass) {
+        //login
+        req.session.user = {
+          username: req.body.username,
+          id: potentialLogin.rows[0].id,
+        };
+
+        res.json({ loggedIn: true, username: req.body.username });
+      } else {
+        res.json({ loggedIn: false, status: 'Wrong username or password' });
+      }
+    } else {
       res.json({ loggedIn: false, status: 'Wrong username or password' });
     }
-  } else {
-    console.log('not good 3');
-    res.json({ loggedIn: false, status: 'Wrong username or password' });
-  }
-});
+  });
 
 router.post('/signup', async (req, res) => {
   validateForm(req, res);
@@ -44,13 +53,14 @@ router.post('/signup', async (req, res) => {
       'INSERT INTO users(username, passhash) values($1, $2) RETURNING id, username',
       [req.body.username, hashedPass],
     );
+    //session sets cookie on the browswer so user doesnt have to relog when refreshing the page
     req.session.user = {
       username: req.body.username,
       id: newUserQuery.rows[0].id,
     };
-    return res.json({ loggedIn: true, username: req.body.username });
+    res.json({ loggedIn: true, username: req.body.username });
   } else {
-    return res.json({ loggedIn: false, status: 'Username taken' });
+    res.json({ loggedIn: false, status: 'Username taken' });
   }
 });
 

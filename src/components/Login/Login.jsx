@@ -1,12 +1,14 @@
 import { VStack, ButtonGroup, Button, Heading } from '@chakra-ui/react';
 import { Formik, Form } from 'formik';
-import React from 'react';
+import React, { useContext } from 'react';
 import * as Yup from 'yup';
 import TextField from './TextField';
 import { useNavigate } from 'react-router-dom';
+import { AccountContext } from '../AccountContext';
 
 const Login = () => {
   const navigate = useNavigate();
+  const { setUser } = useContext(AccountContext);
   return (
     <Formik
       initialValues={{ username: '', password: '' }} //values need to match props being passed in to TextField ln 24,26
@@ -34,12 +36,15 @@ const Login = () => {
             if (!res || !res.ok || res.status >= 400) {
               return;
             }
-            console.log(res);
+            // console.log(res);
             return res.json();
           })
           .then((data) => {
             if (!data) return;
-            console.log(data);
+            //saving user that has login set to true
+            setUser({ ...data });
+            navigate('/home');
+            // console.log(data);
           });
       }}
     >

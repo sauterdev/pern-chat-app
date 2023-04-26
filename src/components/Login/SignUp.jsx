@@ -1,12 +1,14 @@
 import { VStack, ButtonGroup, Button, Heading } from '@chakra-ui/react';
 import { Formik, Form } from 'formik';
-import React from 'react';
+import React, { useContext } from 'react';
 import * as Yup from 'yup';
 import TextField from './TextField';
 import { useNavigate } from 'react-router-dom';
 import { ArrowBackIcon } from '@chakra-ui/icons';
+import { AccountContext } from '../AccountContext';
 
 const SignUp = () => {
+  const { setUser } = useContext(AccountContext);
   const navigate = useNavigate();
   return (
     <Formik
@@ -40,7 +42,10 @@ const SignUp = () => {
           })
           .then((data) => {
             if (!data) return;
-            console.log(data);
+            //saving user that has login set to true
+            setUser({ ...data });
+            navigate('/home');
+            //console.log(data);
           });
       }}
     >
