@@ -1,5 +1,6 @@
 const pool = require('../db');
 const bcrypt = require('bcrypt');
+//creates unique user ids
 const { v4: uuidv4 } = require('uuid');
 
 //keep routes seperate from logic

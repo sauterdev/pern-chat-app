@@ -22,7 +22,7 @@ function Sidebar() {
             return (
               <HStack as={Tab} key={`friend: ${friend}`}>
                 <Circle background={friend.connected ? 'green.700' : 'red.500'} w="15px" h="15px" />
-                <Text>{friend.username}</Text>
+                <Text>{friend}</Text>
               </HStack>
             );
           })}

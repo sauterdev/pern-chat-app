@@ -23,7 +23,7 @@ const AddFriendModal = ({ isOpen, onClose }) => {
     setError('');
     onClose();
   }, [onClose]);
-  const { friendList, setFriendList } = useContext(FriendContext);
+  const { setFriendList } = useContext(FriendContext);
 
   return (
     <Modal isOpen={isOpen} onClose={closeModal} isCentered>
@@ -38,9 +38,7 @@ const AddFriendModal = ({ isOpen, onClose }) => {
             socket.emit('add_friend', values.friendName, ({ errorMsg, done }) => {
               //if no errors, close modal and return from onsubmit fxn
               if (done) {
-                console.log(values.friendName);
                 setFriendList((c) => [values.friendName, ...c]);
-                console.log(friendList);
                 closeModal();
                 return;
               }
