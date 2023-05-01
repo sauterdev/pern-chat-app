@@ -2,8 +2,7 @@ import { useContext, useEffect } from 'react';
 import socket from '../../socket';
 import { AccountContext } from '../AccountContext';
 
-import(useContext);
-const useSocketSetup = (setFriendList) => {
+const useSocketSetup = (setFriendList, setMessages) => {
   const { setUser } = useContext(AccountContext);
   useEffect(() => {
     socket.connect();
@@ -11,16 +10,22 @@ const useSocketSetup = (setFriendList) => {
     socket.on('friends', (friendList) => {
       setFriendList(friendList);
     });
+    socket.on('messages', (messages) => {
+      setMessages(messages);
+    });
     socket.on('connected', (status, username) => {
       setFriendList((prevFriends) => {
-        const friends = [...prevFriends];
-        return friends.map((friend) => {
+        return [...prevFriends].map((friend) => {
           if (friend.username === username) {
             friend.connected = status;
           }
           return friend;
         });
       });
+    });
+
+    socket.on('dm', (message) => {
+      setMessages((prevMessages) => [message, ...prevMessages]);
     });
     socket.on('connect_error', () => {
       //logs user out in the case that there is an error connecting
@@ -30,8 +35,11 @@ const useSocketSetup = (setFriendList) => {
     //returning socket.off prevents duplicate callings of socket.on
     return () => {
       socket.off('connect_error');
+      socket.off('connected');
+      socket.off('friends');
+      socket.off('messages');
     };
-  }, [setUser]);
+  }, [setUser, setFriendList, setMessages]);
 };
 
 export default useSocketSetup;

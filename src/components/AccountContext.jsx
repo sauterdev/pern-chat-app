@@ -28,7 +28,6 @@ const UserContext = ({ children }) => {
           setUser({ loggedIn: false });
           return;
         }
-        console.log('loggedIn');
         setUser({ ...data });
         navigate('/home');
       });
