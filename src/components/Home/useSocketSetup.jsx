@@ -11,7 +11,17 @@ const useSocketSetup = (setFriendList) => {
     socket.on('friends', (friendList) => {
       setFriendList(friendList);
     });
-
+    socket.on('connected', (status, username) => {
+      setFriendList((prevFriends) => {
+        const friends = [...prevFriends];
+        return friends.map((friend) => {
+          if (friend.username === username) {
+            friend.connected = status;
+          }
+          return friend;
+        });
+      });
+    });
     socket.on('connect_error', () => {
       //logs user out in the case that there is an error connecting
       setUser({ loggedIn: false });
