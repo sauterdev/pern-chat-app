@@ -3,7 +3,7 @@ const parseFriendList = require('./parseFriendList');
 
 //initializes user with static hashed userid through redis
 const initializeUser = async (socket) => {
-  socket.user = { ...socket.request.session.user };
+  //socket.user = { ...socket.request.session.user };
   //permanent user id is joined, it is the room id that all friends will communicate too
   socket.join(socket.user.userid);
   await redisClient.hset(`userid:${socket.user.username}`, 'userid', socket.user.userid, 'connected', true);

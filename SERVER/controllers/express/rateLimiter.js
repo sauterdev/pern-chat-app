@@ -1,4 +1,4 @@
-const redisClient = require('../redis');
+const redisClient = require('../../redis');
 
 module.exports.rateLimiter =
   //returns function that takes parameters passed from authRouter. Allows different limit amounts for log in vs register
