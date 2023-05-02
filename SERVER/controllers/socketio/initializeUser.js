@@ -7,12 +7,15 @@ const initializeUser = async (socket) => {
   //permanent user id is joined, it is the room id that all friends will communicate too
   socket.join(socket.user.userid);
   await redisClient.hset(`userid:${socket.user.username}`, 'userid', socket.user.userid, 'connected', true);
+
   const friendList = await redisClient.lrange(`friends:${socket.user.username}`, 0, -1);
 
   const parsedFriendList = await parseFriendList(friendList);
   //get array of IDs with friend list to send to front end
   const friendRooms = parsedFriendList.map((friend) => friend.userid);
   //emit to all friends that we are online
+  console.log(friendRooms);
+  console.log(parsedFriendList);
   if (friendRooms.length > 0) socket.to(friendRooms).emit('connected', true, socket.user.username);
 
   //emit sends event to front end socket client called friends with friendList array

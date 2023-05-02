@@ -13,9 +13,13 @@ const useSocketSetup = (setFriendList, setMessages) => {
     socket.on('messages', (messages) => {
       setMessages(messages);
     });
+    socket.on('dm', (message) => {
+      setMessages((prevMessages) => [message, ...prevMessages]);
+    });
     socket.on('connected', (status, username) => {
       setFriendList((prevFriends) => {
         return [...prevFriends].map((friend) => {
+          console.log('checking connected', friend);
           if (friend.username === username) {
             friend.connected = status;
           }
@@ -24,9 +28,6 @@ const useSocketSetup = (setFriendList, setMessages) => {
       });
     });
 
-    socket.on('dm', (message) => {
-      setMessages((prevMessages) => [message, ...prevMessages]);
-    });
     socket.on('connect_error', () => {
       //logs user out in the case that there is an error connecting
       setUser({ loggedIn: false });

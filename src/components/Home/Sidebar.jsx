@@ -7,7 +7,7 @@ import AddFriendModal from './AddFriendModal';
 function Sidebar() {
   const { friendList } = useContext(FriendContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  console.log(friendList);
+  // console.log(friendList);
   return (
     <>
       <VStack py="1.4rem">
@@ -22,7 +22,7 @@ function Sidebar() {
           {friendList.map((friend) => {
             return (
               <HStack as={Tab} key={`friend:${friend.userid}`}>
-                <Circle background={friend.connected ? 'green.700' : 'red.500'} w="15px" h="15px" />
+                <Circle background={friend.connected === 'true' ? 'green.700' : 'red.500'} w="15px" h="15px" />
                 <Text>{friend.username}</Text>
               </HStack>
             );
