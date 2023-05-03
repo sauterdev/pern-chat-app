@@ -4,9 +4,19 @@ import React, { useContext } from 'react';
 import { FriendContext } from './Home';
 import AddFriendModal from './AddFriendModal';
 
+import { AccountContext } from '../AccountContext';
+
 function Sidebar() {
   const { friendList } = useContext(FriendContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  // const { setUser } = useContext(AccountContext);
+
+  const logOff = () => {
+    // localStorage.removeItem('token');
+    // setUser({
+    //   loggedIn: false,
+    // });
+  };
 
   return (
     <>
@@ -16,6 +26,7 @@ function Sidebar() {
           <Button onClick={onOpen}>
             <ChatIcon />
           </Button>
+          <Button onClick={logOff}>Log Off</Button>
         </HStack>
         <Divider />
         <VStack as={TabList}>
