@@ -49,6 +49,8 @@ const SignUp = () => {
               //if status on the data response from authRouter, set error to it for display
               setError(data.status);
             } else if (data.loggedIn) {
+              //store jwt in local
+              localStorage.setItem('token', data.token);
               navigate('/home');
             }
           });

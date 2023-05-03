@@ -1,18 +1,18 @@
-import { VStack, ButtonGroup, Button, Heading, Text } from '@chakra-ui/react';
-import { Formik, Form } from 'formik';
-import React, { useContext, useState } from 'react';
+import { Button, ButtonGroup, Heading, Text, VStack } from '@chakra-ui/react';
 import * as Yup from 'yup';
-import TextField from '../TextField';
-import { useNavigate } from 'react-router-dom';
+import { Form, Formik } from 'formik';
+import { useContext, useState } from 'react';
+import { useNavigate } from 'react-router';
 import { AccountContext } from '../AccountContext';
+import TextField from '../TextField';
 
 const Login = () => {
-  const navigate = useNavigate();
   const { setUser } = useContext(AccountContext);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
   return (
     <Formik
-      initialValues={{ username: '', password: '' }} //values need to match props being passed in to TextField ln 24,26
+      initialValues={{ username: '', password: '' }}
       validationSchema={Yup.object({
         //Yup verifies input schema
         username: Yup.string().required('Username Required').min(6, 'Username too short').max(28, 'Username too long'),
@@ -48,6 +48,8 @@ const Login = () => {
               //if status on the data response, set error to it for display
               setError(data.status);
             } else if (data.loggedIn) {
+              //stores jwt in local storage
+              localStorage.setItem('token', data.token);
               navigate('/home');
             }
           });
