@@ -18,7 +18,6 @@ const useSocketSetup = (setFriendList, setMessages, socket) => {
     socket.on('connected', (status, username) => {
       setFriendList((prevFriends) => {
         return [...prevFriends].map((friend) => {
-          console.log('checking connected', friend);
           if (friend.username === username) {
             friend.connected = status;
           }
@@ -38,6 +37,7 @@ const useSocketSetup = (setFriendList, setMessages, socket) => {
       socket.off('connected');
       socket.off('friends');
       socket.off('messages');
+      socket.off('dm');
     };
   }, [setUser, setFriendList, setMessages, socket]);
 };

@@ -13,8 +13,7 @@ const initializeUser = async (socket) => {
   //get array of IDs with friend list to send to front end
   const friendRooms = parsedFriendList.map((friend) => friend.userid);
   //emit to all friends that we are online
-  console.log(friendRooms);
-  console.log(parsedFriendList);
+
   if (friendRooms.length > 0) socket.to(friendRooms).emit('connected', true, socket.user.username);
 
   //emit sends event to front end socket client called friends with friendList array
@@ -26,7 +25,7 @@ const initializeUser = async (socket) => {
   //to.from.content
   const messages = msgQuery.map((msgStr) => {
     const parsedStr = msgStr.split('.');
-    return { to: parsedStr[0], from: parsedStr[1], content: parsedStr[3] };
+    return { to: parsedStr[0], from: parsedStr[1], content: parsedStr[2] };
   });
 
   //send messages if they are present

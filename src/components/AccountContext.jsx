@@ -37,6 +37,7 @@ const UserContext = ({ children }) => {
         setUser({ ...data });
         navigate('/home');
       });
+    //eslint-disable-next-line
   }, []);
 
   return <AccountContext.Provider value={{ user, setUser }}>{children}</AccountContext.Provider>;

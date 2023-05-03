@@ -19,7 +19,7 @@ const attemptLogin = async (req, res) => {
           userid: potentialLogin.rows[0].userid,
         },
         process.env.JWT_SECRET,
-        { expiresIn: '7d' },
+        { expiresIn: '1min' },
       )
         .then((token) => {
           res.json({ loggedIn: true, token });
