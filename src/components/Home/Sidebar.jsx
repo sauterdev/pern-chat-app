@@ -26,7 +26,7 @@ function Sidebar() {
           <Button onClick={onOpen}>
             <ChatIcon />
           </Button>
-          <Button onClick={logOff}>Log Off</Button>
+          {/* <Button onClick={logOff}>Log Off</Button> */}
         </HStack>
         <Divider />
         <VStack as={TabList}>
